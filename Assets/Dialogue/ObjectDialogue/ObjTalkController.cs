@@ -13,6 +13,8 @@ public class ObjTalkController : MonoBehaviour
     public GameObject bubbleUI;
     public TextMeshProUGUI bubbleText;
 
+    public bool isDoll = false; // 是否是玩偶
+
     public float displayTime = 3f;
     public Vector2 waitTimeRange = new Vector2(3f, 6f);
 
@@ -71,7 +73,12 @@ public class ObjTalkController : MonoBehaviour
             List<string> lines = GetLinesByState(currentState);
             if (lines.Count > 0)
             {
-                bubbleText.text = lines[currentIndex];
+                string text = lines[currentIndex];
+                if (isDoll)
+                {
+                    text = text.Replace("$PlayerName$", GetPlayerName.FuncGetPlayerName());
+                }
+                bubbleText.text = text;
                 bubbleUI.SetActive(true);
                 yield return new WaitForSeconds(displayTime);
                 bubbleUI.SetActive(false);

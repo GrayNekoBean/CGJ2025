@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using Doozy.Runtime.UIManager.Containers;
 using JetBrains.Annotations;
@@ -44,15 +45,16 @@ namespace CGJ2025
         public TextMeshProUGUI winText; // Reference to the player name text UI element
         public TextMeshProUGUI loseText; // Reference to the lose text UI element
 
-        public AudioClip BGM;
-        private AudioSource audioSource;
+        public bool IsGameRunning { get; private set; } // Property to check if the game is currently running
 
         private float gameTimer = 0f; // Timer for the game, can be used to track elapsed time
         private int gameTimerInt => Mathf.FloorToInt(gameTimer); // Convert game timer to integer seconds
 
-        private static int loseGame = 0; // Flag to track if the last game was a win
+        public static bool LastGameWon => oneGameCompleted && !lastGameFail; // Property to check if the last game was a win
 
-        private bool oneGameCompleted = false; // Flag to track if one game has been completed
+        private static bool lastGameFail = false; // Flag to track if the last game was a win
+
+        private static bool oneGameCompleted = false; // Flag to track if one game has been completed
 
         void Awake()
         {
@@ -67,11 +69,6 @@ namespace CGJ2025
                 Destroy(gameObject); // Destroy duplicate instances
             }
 
-            if (this.audioSource == null)
-            {
-                this.audioSource = GetComponent<AudioSource>(); // Get the AudioSource component from the GameManager
-            }
-
             if (doll == null)
             {
                 this.doll = GameObject.Find("Doll 1"); // Find the doll GameObject in the scene
@@ -83,7 +80,6 @@ namespace CGJ2025
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
-            ResetGame(); // Initialize the game state
 
             if (dialogueRunner == null)
             {
@@ -101,17 +97,30 @@ namespace CGJ2025
                 this.maxScoreText.text = $"{maxScore}"; // Set the lose score text UI element if it exists
             }
 
-            if (this.BGM != null && this.audioSource != null)
+            ResetGame(); // Initialize the game state
+            if (!oneGameCompleted)
             {
-                this.audioSource.clip = this.BGM; // Set the background music clip
-                this.audioSource.loop = true; // Loop the background music
-                this.audioSource.Play(); // Start playing the background music
+                FreezeGame(); // Freeze the game state initially
+            }
+            else
+            {
+                UnfreezeGame(); // Unfreeze the game state if one game has been completed
+            }
+
+            if (this.dialogueRunner != null && !oneGameCompleted)
+            {
+                dialogueRunner.StartDialogue("Dia1"); // Start the initial dialogue
             }
         }
 
         // Update is called once per frame
         void FixedUpdate()
         {
+            if (!IsGameRunning)
+            {
+                return; // If the game is not running, skip the update
+            }
+
             if (this.gameTimer > 0f)
             {
                 this.gameTimer -= Time.fixedDeltaTime; // Increment the game timer
@@ -141,14 +150,12 @@ namespace CGJ2025
         public void ReloadGameScene()
         {
             SceneManager.LoadScene(gameScene); // Reload the game scene
-            ResetGame(); // Reset the game state after reloading
         }
 
         public void ReturnToMainMenu()
         {
             SceneManager.LoadScene(mainMenuScene); // Load the main menu scene
         }
-
 
         public void ResetGame()
         {
@@ -158,7 +165,7 @@ namespace CGJ2025
             ScoreText.text = $"{BackpackGrids.score}"; // Reset the score text UI element
             GameWinView.Hide(); // Hide the game win UI view
             GameLoseView.Hide(); // Hide the game lose UI view
-            if (loseGame > 0)
+            if (lastGameFail)
             {
                 this.doll.SetActive(true); // Hide the doll if the last game was a loss
             }
@@ -183,6 +190,7 @@ namespace CGJ2025
             // Handle game win logic here, such as showing a win screen or updating UI
             GameWinView.Show(); // Show the game win UI view
             oneGameCompleted = true; // Set the one game completed flag to true
+            lastGameFail = false; // Set the last game win flag to true
             DisableDialogue(); // Disable dialogue UI if it exists
 
             if (this.winText != null)
@@ -191,12 +199,14 @@ namespace CGJ2025
                 string text = $"学徒{name}成为了一代传奇"; // Create the win text message
                 this.winText.text = text; // Set the player name in the win text UI element
             }
+
+            FreezeGame(); // Freeze the game state
         }
 
         void OnGameLose()
         {
             GameLoseView.Show(); // Show the game lose UI view
-            loseGame = 1; // Set the last game win flag to false
+            lastGameFail = true; // Set the last game win flag to false
             oneGameCompleted = true; // Set the one game completed flag to true
             DisableDialogue(); // Disable dialogue UI if it exists
 
@@ -206,6 +216,8 @@ namespace CGJ2025
                 string text = $"学徒 {name}"; // Create the lose text message
                 this.loseText.text = text; // Set the lose text in the lose text UI element
             }
+
+            FreezeGame(); // Freeze the game state
         }
 
         void DisableDialogue()
@@ -215,6 +227,24 @@ namespace CGJ2025
             {
                 dialogueRunner.GetComponentInChildren<Canvas>().enabled = false; // Hide the dialogue canvas
             }
+        }
+
+        public void FreezeGame()
+        {
+            IsGameRunning = false; // Set the game running state to false
+        }
+
+        public void UnfreezeGame()
+        {
+            IsGameRunning = true; // Set the game running state to true
+            gameTimer = GameTimeLimit; // Reset the game timer
+            TimerText.text = $"{gameTimerInt}s"; // Update the timer text UI element
+        }
+
+        [YarnCommand("UnfreezeGame")]
+        public static void UnfreezeBackpackGame()
+        {
+            Instance.UnfreezeGame(); // Unfreeze the game state
         }
     }
 }

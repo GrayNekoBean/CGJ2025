@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 
 namespace CGJ2025
 {
-    public class ItemDragController : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
+    public class ItemDragController : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
     {
         private MagicItem magicItem;
         private MagicItemEscapeBehaviour escapeBehaviour;
@@ -56,29 +56,41 @@ namespace CGJ2025
 
         void Update()
         {
-            if (isDragging)
+            if (!GameManager.Instance.IsGameRunning)
             {
-                if (Input.GetKeyDown(KeyCode.E))
-                {
-                    // 如果按下E键，旋转物体
-                    magicItem.Rotate(true); // 顺时针旋转
-                    Debug.Log("Rotating item clockwise");
-                }
-                else if (Input.GetKeyDown(KeyCode.Q))
-                {
-                    // 如果按下Q键，逆时针旋转
-                    magicItem.Rotate(false); // 逆时针旋转
-                    Debug.Log("Rotating item counter-clockwise");
-                }
+                return; // 如果游戏没有运行，跳过更新
             }
+
+            if (isDragging)
+                {
+                    if (Input.GetKeyDown(KeyCode.E))
+                    {
+                        // 如果按下E键，旋转物体
+                        magicItem.Rotate(true); // 顺时针旋转
+                        Debug.Log("Rotating item clockwise");
+                    }
+                    else if (Input.GetKeyDown(KeyCode.Q))
+                    {
+                        // 如果按下Q键，逆时针旋转
+                        magicItem.Rotate(false); // 逆时针旋转
+                        Debug.Log("Rotating item counter-clockwise");
+                    }
+                }
         }
 
         public void OnPointerDown(PointerEventData eventData)
         {
+            if (!GameManager.Instance.IsGameRunning)
+            {
+                return; // 如果游戏没有运行，跳过更新
+            }
+
             // 记录拖拽开始时的状态
             originalPosition = transform.position;
             originalLocalPosition = transform.localPosition;
             originalBackpackSlot = magicItem.centerSlot;
+
+            OnBeginDrag(eventData); // 调用开始拖拽方法
 
             // // 如果物体在背包中，先从背包中移除
             // if (wasInBackpack)
@@ -87,8 +99,18 @@ namespace CGJ2025
             // }
         }
 
+        public void OnPointerUp(PointerEventData eventData)
+        {
+            OnEndDrag(eventData); // 结束拖拽时调用
+        }
+
         public void OnBeginDrag(PointerEventData eventData)
         {
+            if (!GameManager.Instance.IsGameRunning)
+            {
+                return; // 如果游戏没有运行，跳过更新
+            }
+
             // 开始拖拽时的视觉效果
             canvasGroup.alpha = 0.8f;
             canvasGroup.blocksRaycasts = false;
@@ -109,12 +131,17 @@ namespace CGJ2025
             }
 
             magicItem.PickUp();
-            
+
             this.isDragging = true;
         }
 
         public void OnDrag(PointerEventData eventData)
         {
+            if (!GameManager.Instance.IsGameRunning)
+            {
+                return; // 如果游戏没有运行，跳过更新
+            }
+
             // 跟随鼠标移动
             if (canvas.renderMode == RenderMode.ScreenSpaceOverlay)
             {
@@ -134,6 +161,11 @@ namespace CGJ2025
 
         public void OnEndDrag(PointerEventData eventData)
         {
+            if (!GameManager.Instance.IsGameRunning)
+            {
+                return; // 如果游戏没有运行，跳过更新
+            }
+
             // 恢复视觉效果
             canvasGroup.alpha = 1.0f;
             canvasGroup.blocksRaycasts = true;
@@ -182,17 +214,13 @@ namespace CGJ2025
                 // 尝试放置在背包中
                 return TryPlaceInBackpack(targetSlot);
             }
-            else
-            {
-                // 检查是否有其他放置区域（如货架）
-                return TryPlaceInOtherAreas(raycastResults);
-            }
+            return false;
         }
 
         private bool TryPlaceInBackpack(BackpackSlot targetSlot)
         {            
             // 检查是否可以放置在目标位置
-            if (CanPlaceInBackpack(targetSlot.x, targetSlot.y))
+            if (magicItem.FitInBackpack(targetSlot.x, targetSlot.y))
             {
                 // 执行放置逻辑
                 magicItem.PlaceInBackpack(targetSlot.x, targetSlot.y);
@@ -201,35 +229,6 @@ namespace CGJ2025
                 OnItemPlacedInBackpack(targetSlot.x, targetSlot.y);
 
                 return true;
-            }
-            
-            return false;
-        }
-
-        private bool TryPlaceInOtherAreas(System.Collections.Generic.List<RaycastResult> raycastResults)
-        {
-            // TODO: 实现货架等其他区域的放置逻辑
-            // 这里可以检测货架槽位等其他UI元素
-            
-            foreach (var result in raycastResults)
-            {
-                // 示例：检测货架槽位
-                // ShelfSlot shelfSlot = result.gameObject.GetComponent<ShelfSlot>();
-                // if (shelfSlot != null)
-                // {
-                //     return TryPlaceInShelf(shelfSlot);
-                // }
-            }
-            
-            return false;
-        }
-
-        private bool CanPlaceInBackpack(int x, int y)
-        {
-            // 使用BackpackGrids的FitsAt方法检查是否可以放置
-            if (magicItem.backpackGrids != null)
-            {
-                return magicItem.FitInBackpack(x, y);
             }
             
             return false;

@@ -300,7 +300,7 @@ Material:
     - _GlowOffset: 0
     - _GlowOuter: 0.05
     - _GlowPower: 0.75
-    - _GradientScale: 6
+    - _GradientScale: 3
     - _HalftoneFade: 1
     - _HalftoneFadeWidth: 1.5
     - _HalftoneInvert: 0

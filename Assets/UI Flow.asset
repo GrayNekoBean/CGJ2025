@@ -36,7 +36,7 @@ MonoBehaviour:
   CanBeDeleted: 1
   Passthrough: 1
   ClearGraphHistory: 0
-  Position: {x: 340, y: 127}
+  Position: {x: 450.2857, y: 185.62032}
 --- !u!114 &-6952173908082735907
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -96,7 +96,7 @@ MonoBehaviour:
   CanBeDeleted: 1
   Passthrough: 0
   ClearGraphHistory: 0
-  Position: {x: 340, y: -51.5}
+  Position: {x: 450.18094, y: -89.14286}
   OnEnterShowViews:
   - Id:
       Category: Basic
@@ -125,8 +125,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02761efe598a45c98fa1baf4d446c6a7, type: 3}
   m_Name: UI Flow
   m_EditorClassIdentifier: 
-  EditorPosition: {x: 62.666668, y: 214, z: 0}
-  EditorScale: {x: 1, y: 1, z: 1}
+  EditorPosition: {x: -101.14286, y: 304.57144, z: 0}
+  EditorScale: {x: 1.3225, y: 1.3225, z: 1}
   Id: ee0931a8-114d-4164-a085-e496f15580f1
   GraphName: Flow Graph
   GraphDescription: 
@@ -203,7 +203,7 @@ MonoBehaviour:
   CanBeDeleted: 1
   Passthrough: 1
   ClearGraphHistory: 0
-  Position: {x: 559.5, y: -51.5}
+  Position: {x: 698.4045, y: -89.14288}
   GetSceneBy: 0
   LoadSceneMode: 0
   AllowSceneActivation: 1

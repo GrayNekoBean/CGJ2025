@@ -249,7 +249,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   magicItemData: {fileID: 11400000, guid: 5d2b52ffcc69a5240afdabfe51da4438, type: 2}
-  backpackGrids: {fileID: 0}
   anchorSlot: {fileID: 399060277401125876}
 --- !u!114 &6450533898805436568
 MonoBehaviour:
@@ -265,8 +264,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxPathDistance: 500
   minPathDistance: 200
-  speed: 1000
-  restTime: 0.1
+  speed: 800
+  restTime: 0.25
   BackpackRectTransform: {fileID: 0}
   BackgroundRectTransform: {fileID: 0}
 --- !u!1 &4325027654005632159
@@ -446,7 +445,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 119
+    m_Bits: 0
 --- !u!114 &2509229938442791224
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -463,6 +462,7 @@ MonoBehaviour:
   currentState: idle
   bubbleUI: {fileID: 1270864801817674655}
   bubbleText: {fileID: 4316087562230295483}
+  isDoll: 0
   displayTime: 3
   waitTimeRange: {x: 3, y: 6}
 --- !u!1 &9209284723169224348
