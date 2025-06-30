@@ -1,0 +1,13 @@
+﻿title: Start
+---
+
+<<declare $player_name = "你" as string>>
+
+大法师: 你终于醒啦
+大法师: 我等你好久啦
+大法师: 在这里输入你的名字吧
+
+<<show_ui>>
+<<stop>>
+
+===

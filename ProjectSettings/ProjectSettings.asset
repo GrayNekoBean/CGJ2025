@@ -106,7 +106,7 @@ PlayerSettings:
   xboxEnableFitness: 0
   visibleInBackground: 1
   allowFullscreenSwitch: 1
-  fullscreenMode: 1
+  fullscreenMode: 3
   xboxSpeechDB: 0
   xboxEnableHeadOrientation: 0
   xboxEnableGuest: 0
@@ -141,7 +141,8 @@ PlayerSettings:
   visionOSBundleVersion: 1.0
   tvOSBundleVersion: 1.0
   bundleVersion: 1.0
-  preloadedAssets: []
+  preloadedAssets:
+  - {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -574,11 +575,29 @@ PlayerSettings:
   webGLWebAssemblyBigInt: 0
   webGLCloseOnQuit: 0
   webWasm2023: 0
-  scriptingDefineSymbols: {}
+  scriptingDefineSymbols:
+    Android: DOOZY_SIGNALS;DOOZY_REACTOR;DOOZY_UIMANAGER;DOTWEEN
+    EmbeddedLinux: DOOZY_SIGNALS;DOOZY_REACTOR;DOOZY_UIMANAGER;DOTWEEN
+    GameCoreScarlett: DOOZY_SIGNALS;DOOZY_REACTOR;DOOZY_UIMANAGER;DOTWEEN
+    GameCoreXboxOne: DOOZY_SIGNALS;DOOZY_REACTOR;DOOZY_UIMANAGER;DOTWEEN
+    LinuxHeadlessSimulation: DOOZY_SIGNALS;DOOZY_REACTOR;DOOZY_UIMANAGER;DOTWEEN
+    Nintendo Switch: DOOZY_SIGNALS;DOOZY_REACTOR;DOOZY_UIMANAGER;DOTWEEN
+    PS4: DOOZY_SIGNALS;DOOZY_REACTOR;DOOZY_UIMANAGER;DOTWEEN
+    PS5: DOOZY_SIGNALS;DOOZY_REACTOR;DOOZY_UIMANAGER;DOTWEEN
+    QNX: DOOZY_SIGNALS;DOOZY_REACTOR;DOOZY_UIMANAGER;DOTWEEN
+    ReservedCFE: DOOZY_SIGNALS;DOOZY_REACTOR;DOOZY_UIMANAGER;DOTWEEN
+    Standalone: LETAI_TRUESHADOW;DOOZY_SIGNALS;DOOZY_REACTOR;DOOZY_UIMANAGER;PMS_URP;MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED;DOTWEEN;UEE;ODIN_INSPECTOR;ODIN_INSPECTOR_3;ODIN_INSPECTOR_3_1;ODIN_INSPECTOR_3_2;ODIN_INSPECTOR_3_3
+    VisionOS: DOOZY_SIGNALS;DOOZY_REACTOR;DOOZY_UIMANAGER;DOTWEEN
+    WebGL: DOOZY_SIGNALS;DOOZY_REACTOR;DOOZY_UIMANAGER;DOTWEEN
+    Windows Store Apps: DOOZY_SIGNALS;DOOZY_REACTOR;DOOZY_UIMANAGER;DOTWEEN
+    XboxOne: DOOZY_SIGNALS;DOOZY_REACTOR;DOOZY_UIMANAGER;DOTWEEN
+    iPhone: DOOZY_SIGNALS;DOOZY_REACTOR;DOOZY_UIMANAGER;DOTWEEN
+    tvOS: DOOZY_SIGNALS;DOOZY_REACTOR;DOOZY_UIMANAGER;DOTWEEN
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
     Android: 1
+    Standalone: 0
   il2cppCompilerConfiguration: {}
   il2cppCodeGeneration: {}
   il2cppStacktraceInformation: {}
