@@ -10,7 +10,7 @@ namespace CGJ2025
         private Canvas canvas;
         private CanvasGroup canvasGroup;
         private RectTransform rectTransform;
-        
+
         // 拖拽相关
         private Vector3 originalPosition;
         private Vector3 originalLocalPosition;
@@ -30,23 +30,23 @@ namespace CGJ2025
             escapeBehaviour = GetComponent<MagicItemEscapeBehaviour>();
             rectTransform = GetComponent<RectTransform>();
             canvasGroup = GetComponent<CanvasGroup>();
-            
+
             // 如果没有CanvasGroup组件，添加一个
             if (canvasGroup == null)
             {
                 canvasGroup = gameObject.AddComponent<CanvasGroup>();
             }
-            
+
             // 找到Canvas
             canvas = GetComponentInParent<Canvas>();
             if (canvas == null)
             {
                 Debug.LogError("ItemDragController requires a Canvas in parent hierarchy");
             }
-            
+
             // 获取UI摄像机
             uiCamera = canvas.worldCamera;
-            
+
         }
 
         void Start()
@@ -62,20 +62,20 @@ namespace CGJ2025
             }
 
             if (isDragging)
+            {
+                if (Input.GetKeyDown(KeyCode.E))
                 {
-                    if (Input.GetKeyDown(KeyCode.E))
-                    {
-                        // 如果按下E键，旋转物体
-                        magicItem.Rotate(true); // 顺时针旋转
-                        Debug.Log("Rotating item clockwise");
-                    }
-                    else if (Input.GetKeyDown(KeyCode.Q))
-                    {
-                        // 如果按下Q键，逆时针旋转
-                        magicItem.Rotate(false); // 逆时针旋转
-                        Debug.Log("Rotating item counter-clockwise");
-                    }
+                    // 如果按下E键，旋转物体
+                    magicItem.Rotate(true); // 顺时针旋转
+                    Debug.Log("Rotating item clockwise");
                 }
+                else if (Input.GetKeyDown(KeyCode.Q))
+                {
+                    // 如果按下Q键，逆时针旋转
+                    magicItem.Rotate(false); // 逆时针旋转
+                    Debug.Log("Rotating item counter-clockwise");
+                }
+            }
         }
 
         public void OnPointerDown(PointerEventData eventData)
@@ -186,7 +186,7 @@ namespace CGJ2025
                 // 无法放置，回到原位置
                 ReturnToOriginalPosition();
             }
-            
+
             this.isDragging = false;
         }
 
@@ -195,9 +195,9 @@ namespace CGJ2025
             // 检测鼠标下方的UI元素
             var raycastResults = new System.Collections.Generic.List<RaycastResult>();
             EventSystem.current.RaycastAll(eventData, raycastResults);
-            
+
             BackpackSlot targetSlot = null;
-            
+
             // 查找背包槽位
             foreach (var result in raycastResults)
             {
@@ -208,7 +208,7 @@ namespace CGJ2025
                     break;
                 }
             }
-            
+
             if (targetSlot != null)
             {
                 // 尝试放置在背包中
@@ -218,7 +218,7 @@ namespace CGJ2025
         }
 
         private bool TryPlaceInBackpack(BackpackSlot targetSlot)
-        {            
+        {
             // 检查是否可以放置在目标位置
             if (magicItem.FitInBackpack(targetSlot.x, targetSlot.y))
             {
@@ -230,7 +230,7 @@ namespace CGJ2025
 
                 return true;
             }
-            
+
             return false;
         }
 
@@ -281,11 +281,11 @@ namespace CGJ2025
         private bool IsInBackpackArea()
         {
             if (backpackArea == null) return false;
-            
+
             Vector2 localPoint;
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
                 backpackArea, Input.mousePosition, canvas.worldCamera, out localPoint);
-            
+
             return backpackArea.rect.Contains(localPoint);
         }
     }

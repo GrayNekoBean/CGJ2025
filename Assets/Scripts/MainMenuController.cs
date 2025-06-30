@@ -97,7 +97,6 @@ public class MainMenuController : MonoBehaviour
         dialogueRunner.StartDialogue("Start"); // Start the dialogue with the specified start node
     }
 
-
     public void HappyEndingDialogue()
     {
         if (happyEndingTextShown)
@@ -110,7 +109,6 @@ public class MainMenuController : MonoBehaviour
         {
             dialogueRunner = FindFirstObjectByType<DialogueRunner>(); // Find the DialogueRunner in the scene
         }
-
         if (dialogueRunner != null)
         {
             if (GameManager.LastGameWon)
