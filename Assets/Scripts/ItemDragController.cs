@@ -24,8 +24,6 @@ namespace CGJ2025
         // UI相关
         private Camera uiCamera;
         private bool startDragFromBackpack = false;
-
-        
         void Awake()
         {
             magicItem = GetComponent<MagicItem>();
@@ -252,7 +250,7 @@ namespace CGJ2025
             else
             {
                 escapeBehaviour.StartEscaping(); // 如果不在背包中，开始逃逸逻辑
-                // 如果物体不在背包中，可能需要执行逃逸逻辑 
+                // 如果物体不在背包中，可能需要执行逃逸逻辑
             }
         }
 
